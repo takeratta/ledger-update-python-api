@@ -1,0 +1,76 @@
+firmwares:
+ nanos:
+  - 
+   name: '1.1'
+   osu: 
+    hash: ""
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: upgrade_nanos_osu_1.1 
+    firmwareKey: upgrade_nanos_osu_1.1_key
+   final:
+    perso: perso_11
+    targetId: 0x31100002
+    firmware: upgrade_nanos_1.1
+    firmwareKey: upgrade_nanos_1.1_key
+  - 
+   name: 1.1 tmp
+   osu:
+    hash: 523E0000000000FBA4
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: upgrade_nanos_osu_1.1.1_tmp 
+    firmwareKey: upgrade_nanos_osu_1.1.1_tmp_key
+   final:
+    perso: perso_11
+    targetId: 0x31100002
+    firmware: upgrade_nanos_1.1.1_tmp
+    firmwareKey: upgrade_nanos_1.1.1_tmp_key
+  - 
+   name: 1.1 rc1
+   osu: 
+    hash: D5F500000006249
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: upgrade_nanos_osu_1.1_rc1 
+    firmwareKey: upgrade_nanos_osu_1.1_rc1_key
+   final:
+    perso: perso_11
+    targetId: 0x31100002
+    firmware: upgrade_nanos_1.1_rc1
+    firmwareKey: upgrade_nanos_1.1_rc1_key
+
+applications:
+ nanos:
+  - 
+   name: Bitcoin
+   identifier: Bitcoin
+   app:
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: st31_btc 
+    firmwareKey: st31_btc_key
+  -
+   name: Ethereum
+   identifier: Ethereum
+   app:
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: st31_etc 
+    firmwareKey: st31_etc_key
+  - 
+   name: Fido U2F
+   identifier: Fido U2F
+   app:
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: st31_fido_u2f 
+    firmwareKey: st31_fido_u2f_key
+  - 
+   name: GPG Agent
+   identifier: GPG Agent
+   app:
+    perso: perso_11 
+    targetId: 0x31100002
+    firmware: st31_gpg 
+    firmwareKey: st31_gpg_key
