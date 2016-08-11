@@ -13,32 +13,6 @@ firmwares:
     targetId: 0x31100002
     firmware: upgrade_nanos_1.1
     firmwareKey: upgrade_nanos_1.1_key
-  - 
-   name: 1.1 tmp
-   osu:
-    hash: 523E0000000000FBA4
-    perso: perso_11 
-    targetId: 0x31100002
-    firmware: upgrade_nanos_osu_1.1.1_tmp 
-    firmwareKey: upgrade_nanos_osu_1.1.1_tmp_key
-   final:
-    perso: perso_11
-    targetId: 0x31100002
-    firmware: upgrade_nanos_1.1.1_tmp
-    firmwareKey: upgrade_nanos_1.1.1_tmp_key
-  - 
-   name: 1.1 rc1
-   osu: 
-    hash: D5F500000006249
-    perso: perso_11 
-    targetId: 0x31100002
-    firmware: upgrade_nanos_osu_1.1_rc1 
-    firmwareKey: upgrade_nanos_osu_1.1_rc1_key
-   final:
-    perso: perso_11
-    targetId: 0x31100002
-    firmware: upgrade_nanos_1.1_rc1
-    firmwareKey: upgrade_nanos_1.1_rc1_key
 
 applications:
  nanos:
