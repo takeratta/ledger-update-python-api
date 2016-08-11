@@ -8,9 +8,9 @@ from proxyUpdateFirmware11 import proxyUpdateFirmware11
 from proxyDeleteApp import proxyDeleteApp
 
 scripts = {
-  "/dummy": dummyScript,
-  "/install": proxyUpdateFirmware11, 
-  "/uninstall": proxyDeleteApp,
+  "/update/dummy": dummyScript,
+  "/update/install": proxyUpdateFirmware11, 
+  "/update/uninstall": proxyDeleteApp,
 }
 runners = []
 
