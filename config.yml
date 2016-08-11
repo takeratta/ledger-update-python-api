@@ -3,7 +3,7 @@ firmwares:
   - 
    name: '1.1'
    osu: 
-    hash: ""
+    hash: "FF5D14EDD8C61CA15A6F6AC92E75DE83A530BF8F311F7CE1E5C24E0D633592CE"
     perso: perso_11 
     targetId: 0x31100002
     firmware: upgrade_nanos_osu_1.1 
