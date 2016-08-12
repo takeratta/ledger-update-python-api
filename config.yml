@@ -41,8 +41,8 @@ applications:
     firmware: st31_fido_u2f 
     firmwareKey: st31_fido_u2f_key
   - 
-   name: GPG Agent
-   identifier: GPG Agent
+   name: SSH/GPG Agent
+   identifier: SSH/GPG Agent
    app:
     perso: perso_11 
     targetId: 0x31100002
