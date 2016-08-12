@@ -29,7 +29,7 @@ class LedgerUpdateHTTPRequestHandler(BaseHTTPRequestHandler):
 
 def run():
   print('http server is starting...')
-  server_address = ('127.0.0.1', 3000)
+  server_address = ('127.0.0.1', 3001)
   httpd = HTTPServer(server_address, LedgerUpdateHTTPRequestHandler)
   print('http server is running...')
   httpd.serve_forever()
