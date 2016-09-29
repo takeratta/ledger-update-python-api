@@ -17,7 +17,7 @@ firmwares:
 applications:
  nanos:
   -
-   name: Bitcoin
+   name: Bytecoin
    identifier: Bitcoin
    app:
     perso: perso_11

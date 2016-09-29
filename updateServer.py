@@ -2,6 +2,8 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import json
 from ledgerUpdateApi import LedgerUpdateAPI
 import json
+from urlparse import urlparse
+from urlparse import parse_qs
 
 api = LedgerUpdateAPI()
 
@@ -14,8 +16,9 @@ class LedgerUpdateHTTPRequestHandler(BaseHTTPRequestHandler):
 	}
 
 	def do_GET(self):
+		url = urlparse(self.path)
 		#send code 200 response
-		answer = self.endpoints.get(self.path, api.notFound)(self)
+		answer = self.endpoints.get(url.path, api.notFound)(self, url.path, parse_qs(url.query))
 			
 		self.send_response(answer[0])
 

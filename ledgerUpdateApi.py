@@ -2,9 +2,13 @@
 import yaml
 
 lastConfig = None
-def getConfig():
+def getConfig(provider):
 	config = None
-	with open("config.yml", 'r') as stream:
+	filename = "config"
+	if (len(provider) != 0):
+		filename += "_" + provider
+	filename += ".yml"
+	with open(filename, 'r') as stream:
 		config = yaml.load(stream)
 	if (config == None and lastConfig != None):
 		print "WARNING: An error happened during config loading."
@@ -17,14 +21,20 @@ def getConfig():
 
  
 class LedgerUpdateAPI:
-	def getLastFirmware(self, handler):
+	def getLastFirmware(self, handler, path, params):
 		return (500, {"not": "implemented"})
 
-	def getFirmwares(self, handler):
-		return (200, getConfig()["firmwares"])
+	def getFirmwares(self, handler, path, params):
+		try:
+			return (200, getConfig(params.get("provider", [""])[0])["firmwares"])
+		except:
+			return (404, {"error": "Provider not found"})
 
-	def getApplications(self, handler):
-		return (200, getConfig()["applications"])
+	def getApplications(self, handler, path, params):
+		try:
+			return (200, getConfig(params.get("provider", [""])[0])["applications"])
+		except:
+			return (404, {"error": "Provider not found"})
 
-	def notFound(self, handler):
+	def notFound(self, handler, path, params):
 		return (404, {"error": "Call not found"})
