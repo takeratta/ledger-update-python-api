@@ -24,6 +24,8 @@ def inflateItems(items, lang):
 				if (item["notes"] == None): item.pop("notes", None)
 			if (item.get("app") != None):
 				item["identifier"] = hashlib.sha256(str(item["app"])).hexdigest()
+			if (item.get("osu") != None):
+				item["identifier"] = hashlib.sha256(str(item["osu"]) + str(item["final"])).hexdigest()
 	return items
 
 def inflateConfig(config, params):
