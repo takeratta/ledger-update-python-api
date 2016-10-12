@@ -18,7 +18,27 @@ applications:
  nanos:
   -
    name: Bitcoin
-   identifier: Bitcoin
+   app_name: Bitcoin
+   icon: bitcoin
+   version: "1.0"
+   notes: "bitcoin_1_0.md"
+   hash: FF5D14EDD8C61CA15A6F6AC92E75DE83A530BF8F311F7CE1E5C24E0D633592CE
+   bolos_versions:
+    min: '1.1'
+    max: '1.1'
+   permissions:
+    - ""
+   app:
+    perso: perso_11
+    targetId: 0x31100002
+    firmware: st31_btc
+    firmwareKey: st31_btc_key
+  -
+   name: Bitcoin
+   app_name: Bitcoin
+   icon: bitcoin
+   version: "1.1"
+   developer: true
    app:
     perso: perso_11
     targetId: 0x31100002
@@ -26,7 +46,9 @@ applications:
     firmwareKey: st31_btc_key
   -
    name: Litecoin
-   identifier: Litecoin
+   app_name: Litecoin
+   icon: litecoin
+   version: "1.0"
    app:
     perso: perso_11
     targetId: 0x31100002
@@ -34,7 +56,9 @@ applications:
     firmwareKey: st31_ltc_key
   -
    name: Ethereum
-   identifier: Ethereum
+   app_name: Ethereum
+   icon: ethereum
+   version: "1.0"
    app:
     perso: perso_11
     targetId: 0x31100002
@@ -42,7 +66,9 @@ applications:
     firmwareKey: st31_etc_key
   -
    name: Fido U2F
-   identifier: Fido U2F
+   app_name: Fido U2F
+   icon: fido
+   version: "1.0"
    app:
     perso: perso_11
     targetId: 0x31100002
@@ -50,7 +76,9 @@ applications:
     firmwareKey: st31_fido_u2f_key
   -
    name: "SSH/PGP Agent"
-   identifier: "SSH/PGP Agent"
+   app_name: "SSH/PGP Agent"
+   version: "1.0"
+   icon: ssh
    app:
     perso: perso_11
     targetId: 0x31100002
