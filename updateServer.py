@@ -13,6 +13,7 @@ class LedgerUpdateHTTPRequestHandler(BaseHTTPRequestHandler):
 		"/update/firmwares/last": api.getLastFirmware,
 		"/update/firmwares": api.getFirmwares,
 		"/update/applications": api.getApplications,
+		"/update/devices": api.getDevices
 	}
 
 	assets = {

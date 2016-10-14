@@ -1,0 +1,15 @@
+nanos:
+ targetId: 0x31100002
+ name: Ledger Nano S
+
+blue_1:
+ targetId: 0x31000001
+ name: Ledger Blue
+
+blue_2:
+ targetId: 0x31000002
+ name: Ledger Blue
+
+aramis:
+ targetId: 0x31200002
+ name: Ledger Aramis

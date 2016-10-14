@@ -29,8 +29,8 @@ def inflateItems(items, lang):
 	return items
 
 def inflateConfig(config, params):
-	config["firmwares"] = inflateItems(config["firmwares"], params.get("lang", "en")[0])
-	config["applications"] = inflateItems(config["applications"], params.get("lang", "en")[0])
+	config["firmwares"] = inflateItems(config["firmwares"], params.get("lang", "en"))
+	config["applications"] = inflateItems(config["applications"], params.get("lang", "en"))
 	return config
 
 lastConfig = None
@@ -51,6 +51,23 @@ def getConfig(provider, params):
 	else:
 		raise Exception("Unable to load config file")
 
+lastDevices = None
+def getDevices(provider, params):
+	devices = None
+	filename = "devices"
+	if (len(provider) != 0):
+		filename += "_" + provider
+	filename += ".yml"
+	with open(filename, 'r') as stream:
+		devices = yaml.load(stream)
+	if (devices == None and lastDevices != None):
+		print "WARNING: An error happened during config loading."
+		return lastDevices;
+	elif (devices != None):
+		lastDevices = devices
+		return devices
+	else:
+		raise Exception("Unable to load devices file")
  
 class LedgerUpdateAPI:
 	def getLastFirmware(self, handler, path, params):
@@ -66,6 +83,13 @@ class LedgerUpdateAPI:
 		try:
 			return (200, getConfig(params.get("provider", [""])[0], params)["applications"])
 		except:
+			return (404, {"error": "Provider not found"})
+
+	def getDevices(self, handler, path, params):
+		try:
+			return (200, getDevices(params.get("provider", [""])[0], params))
+		except Exception as ex:
+			print ex
 			return (404, {"error": "Provider not found"})
 
 	def notFound(self, handler, path, params):
