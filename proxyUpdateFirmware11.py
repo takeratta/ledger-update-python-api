@@ -18,12 +18,14 @@ def serverQuery(request, url, args):
 		raise Exception(response.exception)
 	return response
 
+def auto_int(x):
+    return int(x, 0)
+
 def proxyUpdateFirmware11(dongle, args):
 
 	# Identify
-
-	targetid = bytearray(struct.pack('>I', 0x31000002)) # Blue
-	targetid = bytearray(struct.pack('>I', 0x31100002)) # Nano S
+	args.targetId = auto_int(args.targetId)
+	targetid = bytearray(struct.pack('>I', args.targetId))
 	apdu = bytearray([0xe0, 0x04, 0x00, 0x00]) + bytearray([len(targetid)]) + targetid
 	dongle.exchange(apdu)
 
