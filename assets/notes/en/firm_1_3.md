@@ -1,26 +1,18 @@
 New in this version
 =======
 
-PIN codes are now up to 8 digits
-
-Change your PIN without resetting the device
-
-Auto-lock device when inactive
-
-Plausible deniability with secure passphrase entry
-
-Reset your device from the Settings app
-
-Support for personal certificates 
-
+PIN codes are now up to 8 digits  
+Change your PIN without resetting the device  
+Auto-lock device when inactive  
+Plausible deniability with secure passphrase entry  
+Reset your device from the Settings app  
+Support for personal certificates  
 
 Fixed bugs
 =======
 
-Better USB 3.0 compatibility
-
-Security fixes
-
+Better USB 3.0 compatibility  
+Security fixes  
 
 Warning
 =======
