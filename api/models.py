@@ -12,14 +12,32 @@ class Provider(models.Model):
         return self.name
 
 
+class Device(models.Model):
+    name = models.CharField(max_length=200)
+    target_id = models.CharField(max_length=200)
+
+class Firmware(models.Model):
+    name = models.CharField(max_length=200)
+    firm_id = models.CharField(max_length=20)
+    firmware_version = models.CharField(max_length=20)
+    hash = models.CharField(max_length=200)
+    target_id = models.ForeignKey(Device)
+    added = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    changelog = models.CharField(max_length=5000)
+    provider = models.ManyToManyField(Provider,
+                                      through='FirmwareDistribution',
+                                      through_fields=('firmware','provider'))
+    def __str__(self):
+        return '%s %s' % (self.name, self.firmware_version)
+
 class Application(models.Model):
     name = models.CharField(max_length=200)
     app_id = models.CharField(max_length=20)
     version = models.CharField(max_length=20)
     hash = models.CharField(max_length=200)
-    target_id = models.CharField(max_length=200)
-    minimum_firmware = models.ForeignKey(Firmware.firmware_version)
-    maximum_firmware = models.ForeignKey(Firmware.firmware_version)  #possibly replace by 1 single manytomany relation
+    minimum_firmware = models.ForeignKey(Firmware, related_name='min_version')
+    maximum_firmware = models.ForeignKey(Firmware, related_name='max_version')  #possibly replace by 1 single manytomany relation
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     changelog = models.CharField(max_length=5000)
@@ -31,27 +49,13 @@ class Application(models.Model):
 
 
 
-class Firmware(models.Model):
-    name = models.CharField(max_length=200)
-    firm_id = models.CharField(max_length=20)
-    firmware_version = models.CharField(max_length=20)
-    hash = models.CharField(max_length=200)
-    target_id = models.CharField(max_length=200)
-    added = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    changelog = models.CharField(max_length=5000)
-    provider = models.ManyToManyField(Provider,
-                                      through='FirmwareDistribution',
-                                      through_fields=('firmware','provider'))
-    def __str__(self):
-        return '%s %s' % (self.name, self.firmware_version)
 
-class AppDistibution(models.Model):
+class AppDistribution(models.Model):
     app = models.ForeignKey(Application, on_delete=models.CASCADE)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     production = models.BooleanField
 
-class FirmawareDistibution(models.Model):
+class FirmwareDistribution(models.Model):
     firmware = models.ForeignKey(Firmware, on_delete=models.CASCADE)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     production = models.BooleanField
