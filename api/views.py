@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseNotFound
+import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -11,21 +13,24 @@ from .models import Application,Firmware,Device,FirmwareDistribution
 #legacy api
 def legacy_firmwares(request):
     try:
-        return (200, getConfig(request.GET.get('provider', [""])[0], dict(request.GET)) ["firmwares"])
+        response = (200, getConfig(request.GET.get('provider', [""])[0], dict(request.GET)) ["firmwares"])
     except:
-        return (404, {"error": "Provider not found"})
+        response = (404, {"error": "Provider not found"})
+    return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
 def legacy_applications(request):
     try:
-        return (200, getConfig(request.GET.get('provider', [""])[0], dict(request.GET)) ["applications"])
+        response = (200, getConfig(request.GET.get('provider', [""])[0], dict(request.GET)) ["applications"])
     except:
-        return (404, {"error": "Provider not found"})
+        response = (404, {"error": "Provider not found"})
+    return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
 def legacy_devices(request):
     try:
-        return (200, getDevices(request.GET.get('provider', [""])[0], dict(request.GET)))
+        response = (200, getDevices(request.GET.get('provider', [""])[0], dict(request.GET)))
     except:
-        return (404, {"error": "Provider not found"})
+        response = (404, {"error": "Provider not found"})
+    return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
 def index(request):
     latest_updates = Application.objects.order_by('updated')[:5]
