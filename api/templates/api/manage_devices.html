@@ -1,0 +1,5 @@
+<ul>
+{% for device in devices %}
+    <li><a href="{% url 'api:manage_device' device.id %}">{{device.name }}</a></li>
+{% endfor %}
+</ul>
