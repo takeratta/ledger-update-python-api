@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^update/firmwares', views.legacy_firmwares, name='legacy_firmwares'),
     url(r'update/applications', views.legacy_applications, name='legacy_applications'),
     url(r'update/devices', views.legacy_devices, name='legacy_devices'),
+    url(r'applications', views.applications, name='list_applications'),
+    url(r'firmwares', views.firmwares, name='list_firmwares'),
 ]

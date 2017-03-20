@@ -20,13 +20,18 @@ class Device(models.Model):
 
 class Firmware(models.Model):
     name = models.CharField(max_length=200)
-    #firm_id = models.CharField(max_length=20)
+    notes = models.CharField(max_length=5000)
+    perso = models.CharField(max_length=200)
+    firmware_osu = models.CharField(max_length=200)
+    firmwareKey_osu = models.CharField(max_length=200)
+    hash_osu = models.CharField(max_length=200)
+    firmware_final = models.CharField(max_length=200)
+    firmwareKey_final = models.CharField(max_length=200)
+    hash_final = models.CharField(max_length=200)
     firmware_version = models.CharField(max_length=20)
-    hash = models.CharField(max_length=200)
     target_id = models.ForeignKey(Device)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    changelog = models.CharField(max_length=5000)
     provider = models.ManyToManyField(Provider,
                                       through='FirmwareDistribution',
                                       through_fields=('firmware','provider'),
@@ -35,9 +40,8 @@ class Firmware(models.Model):
     def __str__(self):
         return '%s %s' % (self.name, self.firmware_version)
 
-class Application(models.Model):
-    name = models.CharField(max_length=200)
-    #app_id = models.CharField(max_length=20)
+class ApplicationRelease(models.Model):
+    application = models.ForeignKey(Application)
     version = models.CharField(max_length=20)
     hash = models.CharField(max_length=200)
     minimum_firmware = models.ForeignKey(Firmware, related_name='min_version')
@@ -45,13 +49,25 @@ class Application(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     changelog = models.CharField(max_length=5000)
+    firmware = models.CharField(max_length=200)
+    firmwareKey = models.CharField(max_length=200)
+    perso = models.CharField(max_length=50)
+    legacy_flag = models.NullBooleanField
     '''provider = models.ManyToManyField(Provider,
                                       through='AppDistribution',
                                       through_fields=('app','provider'),
                                       blank=True,
                                       null=True)'''
     def __str__(self):
+        return '%s %s' % (self.application.name, self.version)
+
+class Application(models.Model):
+    name = models.CharField(max_length=200)
+    identifier = models.CharField(max_length=50)
+    #icon ....
+    def __str__(self):
         return self.name
+
 
 
 '''class AppDistribution(models.Model):
