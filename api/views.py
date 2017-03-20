@@ -33,52 +33,23 @@ from api.serializers import FirmwareSerializer
 from rest_framework.views import APIView
 
 
-#class based
 from django.http import Http404
+from rest_framework import mixins
+from rest_framework import generics
+from rest_framework import permissions
 
 
 
-@api_view(['GET','POST'])
-def firmware_list(request):
-    """
-    List all firmware, or create a new firmware.
-    """
-    if request.method == 'GET':
-        firmwares = Firmware.objects.all()
-        serializer = FirmwareSerializer(firmwares, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = FirmwareSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class FirmwareList(generics.ListCreateAPIView):
+    queryset = Firmware.objects.all()
+    serializer_class = FirmwareSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def firmware_detail(request, pk):
-    """
-    Retrieve, update or delete a  firmware.
-    """
-    try:
-        firmware = Firmware.objects.get(pk=pk)
-    except Firmware.DoesNotExist:
-        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        serializer = FirmwareSerializer(firmware)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = FirmwareSerializer(firmware, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        firmware.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class FirmwareDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Firmware.objects.all()
+    serializer_class = FirmwareSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 def legacy_applications(request):

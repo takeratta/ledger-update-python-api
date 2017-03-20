@@ -16,7 +16,8 @@ urlpatterns = [
     #legacy support
     url(r'^update/firmwares', views.legacy_firmwares, name='legacy_firmwares'),
     url(r'^update/applications', views.legacy_applications, name='legacy_applications'),
-    url(r'^applications', views.applications, name='list_applications'),
-    url(r'^firmwares/$', views.firmware_list),
-    url(r'^firmwares/(?P<pk>[0-9]+)/$', views.firmware_detail),
+    url(r'^firmwares/$', views.FirmwareList.as_view()),
+    url(r'^firmwares/(?P<pk>[0-9]+)/$', views.FirmwareDetail.as_view()),
+    url(r'^users/$', views.UserList.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
 ]
