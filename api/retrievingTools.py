@@ -1,9 +1,49 @@
 from api.models import Application,Provider,ApplicationRelease,Firmware,FirmwareDistribution
-from django.db.models import Q
+from django.db.models import Q,Max
 
-def get_new_app(firmware,installed_apps, ):
-    compatible_apps =
+def get_new_app(request):
+    installed_apps= Application.objects.filter(applicationRelease_set__firmwareKey__in = request.GET.get('installed_apps'))
+    firmware = Firmware.objects.get(firmwareKey=request.GET.get('firmware'))
+    new_apps = list(ApplicationRelease.objects.exclude(application__in=installed_apps).filter(
+                                                 firmwareCompatibility_set__production=True,
+                                                 firmware=firmware))
+    if new_apps==[]:
+        code = 204
+    else:
+        code =200
+    return code, new_apps
 
+
+def get_last_firmware(request):
+    compatible_firmware = Firmware.objects.filter(target_id=request.GET.get('target_id'),
+                                            provider__name=request.GET.get('provider'),
+                                            firmwareDistribution_set__production=True)#or maybe provider__through__production
+    last_firmware = compatible_firmware[0]
+    for firm in compatible_firmware:
+        if compare_version(firm,last_firmware):
+            last_firmware= firm
+    if last_firmware.firmwareKey_final==request.GET.get('firmware'):
+        code =204
+    else:
+        code = 200
+    return code, last_firmware
+
+def get_updatable_app(request):
+    installed_apps= Application.objects.filter(applicationRelease_set__firmwareKey__in = request.GET.get('installed_apps'))
+    installed_releases = ApplicationRelease.objects.filter(firmwareKey__in = request.GET.get('installed_apps'))
+    firmware = Firmware.objects.get(firmwareKey = request.GET.get('firmware'))
+    releases = ApplicationRelease.objects.filter(application__in = installed_apps,
+                                                 firmwareCompatibility_set__production = True,
+                                                firmware = firmware)
+    updates = []
+    for app in releases:
+        if compare_version(app,installed_releases.filter(application__identifier = app.application.identifier)):
+            updates.append(app)
+    if updates == []:
+        code = 204
+    else:
+        code = 200
+    return code, updates
 
 def get_applications_legacy(request):
     try:
@@ -32,6 +72,7 @@ def get_applications_legacy(request):
         code=404
         data= {"error": "Provider: "+str(provider)+" not found"}
     return code,data
+
 
 def get_firmwares_legacy(request):
     try:
@@ -67,4 +108,8 @@ def get_firmwares_legacy(request):
     return code,data
 
 
+def compare_version(ver1,ver2):
+    if ver2=='':
+        return True
+    return int(ver1.version.replace('.',''))>int(ver2.version.replace('.',''))
 

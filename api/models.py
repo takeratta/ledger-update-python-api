@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 class Provider(models.Model):
     name = models.CharField(max_length=200)
-    provider_id = models.CharField(max_length=20)
+    #provider_id = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
@@ -20,6 +20,7 @@ class Device(models.Model):
 
 class Firmware(models.Model):
     name = models.CharField(max_length=200)
+    version = models.CharField(max_length=20)
     notes = models.CharField(max_length=5000)
     perso = models.CharField(max_length=200)
     firmware_osu = models.CharField(max_length=200)
@@ -44,8 +45,8 @@ class ApplicationRelease(models.Model):
     application = models.ForeignKey(Application)
     version = models.CharField(max_length=20)
     hash = models.CharField(max_length=200)
-    minimum_firmware = models.ForeignKey(Firmware, related_name='min_version')
-    maximum_firmware = models.ForeignKey(Firmware, related_name='max_version', blank=True, null=True)  #possibly replace by 1 single manytomany relation
+    minimum_firmware = models.ForeignKey(Firmware)
+    maximum_firmware = models.ForeignKey(Firmware, blank=True)  #possibly replace by 1 single manytomany relation
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     changelog = models.CharField(max_length=5000)
@@ -53,11 +54,9 @@ class ApplicationRelease(models.Model):
     firmwareKey = models.CharField(max_length=200)
     perso = models.CharField(max_length=50)
     legacy_flag = models.NullBooleanField
-    '''provider = models.ManyToManyField(Provider,
-                                      through='AppDistribution',
-                                      through_fields=('app','provider'),
-                                      blank=True,
-                                      null=True)'''
+    compatible_firmwares= models.ManyToManyField(Firmware,
+                                      through='FirmwareCompatibility',
+                                      through_fields=('app','firmware'))
     def __str__(self):
         return '%s %s' % (self.application.name, self.version)
 
@@ -83,3 +82,11 @@ class FirmwareDistribution(models.Model):
     production = models.BooleanField
     def __str__(self):
         return 'production state: %s for %s' % (self.production, self.firmware.name)
+
+class FirmwareCompatibility(models.Model):
+    firmware = models.ForeignKey(Firmware, on_delete=models.CASCADE)
+    app = models.ForeignKey(ApplicationRelease, on_delete=models.CASCADE)
+    production = models.BooleanField
+    def __str__(self):
+        return 'app production state: %s for %s' % (self.production, self.firmware.name)
+

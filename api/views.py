@@ -9,6 +9,7 @@ from api import retrievingTools
 from api.ledgerUpdateApi import getConfig, getDevices
 from api.serializers import UserSerializer, GroupSerializer
 from .models import Application, Device
+from django.core import serializers
 
 
 #legacy api
@@ -16,17 +17,17 @@ def legacy_applications(request):
     response = retrievingTools.get_applications_legacy(request)
     return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
+
 def legacy_firmwares(request):
     response = retrievingTools.get_firmwares_legacy(request)
     return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
 
-def legacy_devices(request):
-    try:
-        response = (200, getDevices(request.GET.get('provider', [""])[0], dict(request.GET)))
-    except:
-        response = (404, {"error": "Provider not found"})
+def new_applications(request):
+    response  = retrievingTools.get_new_app(request)
     return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
+
+
 
 def index(request):
     latest_updates = Application.objects.order_by('updated')[:5]
@@ -35,13 +36,16 @@ def index(request):
     }
     return render(request,'api/index.html',context)
 
+
 def manage_devices(request):
     devices = Device.objects.all()
     return render(request, 'api/manage_devices.html',{'devices':devices})
 
+
 def manage_device(request,device_id):
     device = Device.objects.filter(id=device_id)[0]
     return render(request, 'api/manage_device.html',{'device':device})
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -58,4 +62,4 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-def applications(request):
+
