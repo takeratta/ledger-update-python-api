@@ -1,9 +1,10 @@
 from api.models import Application,Provider,ApplicationRelease,Firmware,FirmwareDistribution
 from django.db.models import Q,Max
 
+
 def get_new_app(request):
-    installed_apps= Application.objects.filter(applicationRelease_set__firmwareKey__in = request.GET.get('installed_apps'))
-    firmware = Firmware.objects.get(firmwareKey=request.GET.get('firmware'))
+    installed_apps= Application.objects.filter(applicationRelease_set__hash__in = request.GET.get('installed_apps'))
+    firmware = Firmware.objects.get(hash_final=request.GET.get('firmware'))
     new_apps = list(ApplicationRelease.objects.exclude(application__in=installed_apps).filter(
                                                  firmwareCompatibility_set__production=True,
                                                  firmware=firmware))
@@ -22,16 +23,17 @@ def get_last_firmware(request):
     for firm in compatible_firmware:
         if compare_version(firm,last_firmware):
             last_firmware= firm
-    if last_firmware.firmwareKey_final==request.GET.get('firmware'):
+    if last_firmware.hash_final==request.GET.get('firmware'):
         code =204
     else:
         code = 200
     return code, last_firmware
 
+
 def get_updatable_app(request):
-    installed_apps= Application.objects.filter(applicationRelease_set__firmwareKey__in = request.GET.get('installed_apps'))
-    installed_releases = ApplicationRelease.objects.filter(firmwareKey__in = request.GET.get('installed_apps'))
-    firmware = Firmware.objects.get(firmwareKey = request.GET.get('firmware'))
+    installed_apps= Application.objects.filter(applicationRelease_set__hash__in = request.GET.get('installed_apps'))
+    installed_releases = ApplicationRelease.objects.filter(hash__in = request.GET.get('installed_apps'))
+    firmware = Firmware.objects.get(hash_final = request.GET.get('firmware'))
     releases = ApplicationRelease.objects.filter(application__in = installed_apps,
                                                  firmwareCompatibility_set__production = True,
                                                 firmware = firmware)
@@ -44,6 +46,7 @@ def get_updatable_app(request):
     else:
         code = 200
     return code, updates
+
 
 def get_applications_legacy(request):
     try:

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-
+from api.models import Firmware, Device, Provider
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -12,3 +12,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
+
+class FirmwareSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Firmware
+        fields = '__all__'
