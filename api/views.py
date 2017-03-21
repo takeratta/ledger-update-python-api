@@ -37,7 +37,7 @@ from django.http import Http404
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import permissions
-
+from api.permissions import IsAdminOrReadOnly
 
 
 class FirmwareList(generics.ListCreateAPIView):
@@ -49,7 +49,7 @@ class FirmwareList(generics.ListCreateAPIView):
 class FirmwareDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Firmware.objects.all()
     serializer_class = FirmwareSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)
 
 
 def legacy_applications(request):
@@ -66,15 +66,7 @@ def new_applications(request):
     response  = retrievingTools.get_new_app(request)
     return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
-
-def index(request):
-    latest_updates = Application.objects.order_by('updated')[:5]
-    context = {
-        'latest_updates': latest_updates,
-    }
-    return render(request,'api/index.html',context)
-
-
+'''
 def manage_devices(request):
     devices = Device.objects.all()
     return render(request, 'api/manage_devices.html',{'devices':devices})
@@ -83,7 +75,7 @@ def manage_devices(request):
 def manage_device(request,device_id):
     device = Device.objects.filter(id=device_id)[0]
     return render(request, 'api/manage_device.html',{'device':device})
-
+'''
 
 class UserViewSet(viewsets.ModelViewSet):
     """

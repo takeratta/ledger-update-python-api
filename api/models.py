@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.contrib.auth.models import User
 
 # Create your models here.
 #@python_2_unicode_compatible  # only if you need to support Python 2
@@ -20,7 +21,18 @@ class Device(models.Model):
         return self.name
 
 
+class Resource(models.Model):
+    access = models.ManyToManyField(User,
+                                    through='Administration',
+                                    through_fields=('resource','user'))
+
+    class Meta:
+        abstract = True
+
+
 class Firmware(models.Model):
+    added = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=200)
     version = models.CharField(max_length=20)
     notes = models.CharField(max_length=5000)
@@ -33,13 +45,12 @@ class Firmware(models.Model):
     hash_final = models.CharField(max_length=200)
     firmware_version = models.CharField(max_length=20)
     target_id = models.ForeignKey(Device)
-    added = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
     provider = models.ManyToManyField(Provider,
                                       through='FirmwareDistribution',
                                       through_fields=('firmware','provider'),
                                       blank=True,
                                       null=True)
+
     def __str__(self):
         return '%s %s' % (self.name, self.firmware_version)
 

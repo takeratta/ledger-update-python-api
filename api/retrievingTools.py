@@ -112,7 +112,7 @@ def get_firmwares_legacy(request):
 
 
 def compare_version(ver1,ver2):
-    if ver2=='':
+    if ver2=='' and ver1!='':
         return True
     return int(ver1.version.replace('.',''))>int(ver2.version.replace('.',''))
 
