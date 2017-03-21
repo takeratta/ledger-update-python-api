@@ -1,15 +1,9 @@
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.contrib.auth.models import User
-
-# Create your models here.
-#@python_2_unicode_compatible  # only if you need to support Python 2
+from django.contrib.auth.models import User,Group
 
 
 class Provider(models.Model):
     name = models.CharField(max_length=200)
-    #provider_id = models.CharField(max_length=20)
-
     def __str__(self):
         return self.name
 
@@ -22,15 +16,26 @@ class Device(models.Model):
 
 
 class Resource(models.Model):
-    access = models.ManyToManyField(User,
+    access = models.ManyToManyField(Group,
                                     through='Administration',
-                                    through_fields=('resource','user'))
+                                    through_fields=('resource','group'),
+                                    related_name="%(qpp_label)s_%(class)s_related",
+                                    related_query_name = "%(app_label)s_%(class)ss")
 
     class Meta:
         abstract = True
 
 
-class Firmware(models.Model):
+class Administration(models.Model):
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    access_right = models.IntegerField()
+
+    def __str__(self):
+        return 'app production state: %s for %s' % (self.production, self.firmware.name)
+
+
+class Firmware(Resource):
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=200)
@@ -47,13 +52,10 @@ class Firmware(models.Model):
     target_id = models.ForeignKey(Device)
     provider = models.ManyToManyField(Provider,
                                       through='FirmwareDistribution',
-                                      through_fields=('firmware','provider'),
-                                      blank=True,
-                                      null=True)
+                                      through_fields=('firmware','provider'))
 
     def __str__(self):
         return '%s %s' % (self.name, self.firmware_version)
-
 
 
 class Application(models.Model):
@@ -70,8 +72,7 @@ class ApplicationRelease(models.Model):
     application = models.ForeignKey(Application)
     version = models.CharField(max_length=20)
     hash = models.CharField(max_length=200)
-    minimum_firmware = models.ForeignKey(Firmware)
-    maximum_firmware = models.ForeignKey(Firmware, blank=True)  #possibly replace by 1 single manytomany relation
+    minimum_firmware = models.ForeignKey(Firmware, related_name='minimum_firmware')
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     changelog = models.CharField(max_length=5000)
@@ -84,8 +85,6 @@ class ApplicationRelease(models.Model):
                                       through_fields=('app','firmware'))
     def __str__(self):
         return '%s %s' % (self.application.name, self.version)
-
-
 
 
 class FirmwareDistribution(models.Model):

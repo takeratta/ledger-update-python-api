@@ -1,43 +1,26 @@
 import json
-
-from django.contrib.auth.models import User, Group
-from django.shortcuts import render
-from rest_framework import viewsets
-
 from api import retrievingTools
-from api.ledgerUpdateApi import getConfig, getDevices
-from api.serializers import UserSerializer, GroupSerializer
-from .models import Application, Device
-from django.core import serializers
-
-
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from api.serializers import UserSerializer, GroupSerializer
-
-
-
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-
 from django.http import HttpResponse
-from rest_framework import status
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
 from api.models import Firmware
 from api.serializers import FirmwareSerializer
-from rest_framework.views import APIView
-
-
-from django.http import Http404
-from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import permissions
 from api.permissions import IsAdminOrReadOnly
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'snippets': reverse('firmware-list', request=request, format=format)
+    })
+
 
 
 class FirmwareList(generics.ListCreateAPIView):
@@ -78,18 +61,20 @@ def manage_device(request,device_id):
 '''
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

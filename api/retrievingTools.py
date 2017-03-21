@@ -1,5 +1,4 @@
 from api.models import Application,Provider,ApplicationRelease,Firmware,FirmwareDistribution
-from django.db.models import Q,Max
 
 
 def get_new_app(request):
@@ -18,7 +17,7 @@ def get_new_app(request):
 def get_last_firmware(request):
     compatible_firmware = Firmware.objects.filter(target_id=request.GET.get('target_id'),
                                             provider__name=request.GET.get('provider'),
-                                            firmwareDistribution_set__production=True)#or maybe provider__through__production
+                                            firmwaredistribution_set__production=True)#or maybe provider__through__production
     last_firmware = compatible_firmware[0]
     for firm in compatible_firmware:
         if compare_version(firm,last_firmware):

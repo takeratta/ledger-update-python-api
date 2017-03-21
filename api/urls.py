@@ -9,10 +9,8 @@ router.register(r'groups', views.GroupViewSet)
 
 app_name = 'api'
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^$', views.api_root),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^devices/$', views.manage_devices, name='manage_devices'),
-    url(r'^device/(?P<device_id>[0-9]+)/$',views.manage_device, name='manage_device'),
     #legacy support
     url(r'^update/firmwares', views.legacy_firmwares, name='legacy_firmwares'),
     url(r'^update/applications', views.legacy_applications, name='legacy_applications'),
