@@ -23,9 +23,6 @@ def api_root(request, format=None):
     })
 
 
-
-
-
 class FirmwareList(generics.ListCreateAPIView):
     queryset = Firmware.objects.all()
     serializer_class = FirmwareSerializer
@@ -59,7 +56,7 @@ class FirmwareCompatibilityList(generics.ListCreateAPIView):
 class FirmwareDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Firmware.objects.all()
     serializer_class = FirmwareSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class ApplicationReleaseDetail(generics.RetrieveUpdateDestroyAPIView):

@@ -3,12 +3,13 @@ from django.contrib import admin
 # Register your models here.
 from .models import Provider
 from .models import Device
-from .models import Application
+from .models import Application, ApplicationRelease
 from .models import Firmware
-from .models import FirmwareDistribution
+from .models import FirmwareDistribution, FirmwareCompatibility
 
 admin.site.register(Device)
 admin.site.register(Firmware)
 admin.site.register(FirmwareDistribution)
+admin.site.register(FirmwareCompatibility)
 admin.site.register(Provider)
 admin.site.register(Application)

@@ -15,27 +15,8 @@ class Device(models.Model):
         return self.name
 
 
-class Resource(models.Model):
-    access = models.ManyToManyField(Group,
-                                    through='Administration',
-                                    through_fields=('resource','group'),
-                                    related_name="%(qpp_label)s_%(class)s_related",
-                                    related_query_name = "%(app_label)s_%(class)ss")
 
-    class Meta:
-        abstract = True
-
-
-class Administration(models.Model):
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    access_right = models.IntegerField()
-
-    def __str__(self):
-        return 'app production state: %s for %s' % (self.production, self.firmware.name)
-
-
-class Firmware(Resource):
+class Firmware(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=200)
