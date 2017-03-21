@@ -90,3 +90,4 @@ ENV/
 
 #project parameters
 .idea/
+/db.sqlite3
