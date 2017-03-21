@@ -12,6 +12,7 @@ from rest_framework import permissions
 from api.permissions import IsAdminOrReadOnly
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from django.core import serializers
 
 
 @api_view(['GET'])
@@ -20,6 +21,8 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'snippets': reverse('firmware-list', request=request, format=format)
     })
+
+
 
 
 
@@ -45,9 +48,19 @@ def legacy_firmwares(request):
     return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
 
 
+def updatable_applications(request):
+    response  = retrievingTools.get_updatable_app(request)
+    return HttpResponse(serializers.serialize('json',response[1]),status_code = response[0], content_type = 'application/json')
+
+
 def new_applications(request):
     response  = retrievingTools.get_new_app(request)
-    return HttpResponse(json.dumps(response[1]),status_code = response[0], content_type = 'application/json')
+    return HttpResponse(serializers.serialize('json',response[1]),status_code = response[0], content_type = 'application/json')
+
+
+def last_firmware(request):
+    response  = retrievingTools.get_last_firmware(request)
+    return HttpResponse(serializers.serialize('json',response[1]),status_code = response[0], content_type = 'application/json')
 
 '''
 def manage_devices(request):
